@@ -10,6 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import Lab1.*;
+import Lab2.*;
 
 import static java.lang.Integer.parseInt;
 
@@ -23,10 +24,12 @@ public class LabTabs extends Application {
         TabPane tabPane = new TabPane();
         Tab tablab0 = new Tab("Lab 0");
         Tab tablab1 = new Tab("Lab 1");
+        Tab tablab2 = new Tab("Lab 2");
 
         tablab0.setContent(lab0());
         tablab1.setContent(lab1());
-        tabPane.getTabs().addAll(tablab0,tablab1);
+        tablab2.setContent(lab2());
+        tabPane.getTabs().addAll(tablab0,tablab1,tablab2);
         Scene scene = new Scene(tabPane, 600, 350);
         stage.setScene(scene);
         stage.setTitle("Data Structures' Laboratories");
@@ -243,6 +246,118 @@ public class LabTabs extends Application {
             }
         });
 
+        return borderPane;
+    }
+
+    public BorderPane lab2(){
+        LinkedList<Integer> list = new LinkedList<>();
+        for (int i = 0; i < 10; i++) {
+            list.insert(i);
+        }
+
+        BorderPane borderPane = new BorderPane();
+        VBox vBox = new VBox(10);
+        vBox.setAlignment(Pos.CENTER);
+        borderPane.setCenter(vBox);
+
+        Label lbTitle = new Label("Lab2 : Linked List");
+        lbTitle.setFont(Font.font(20));
+
+        GridPane gridPane = new GridPane();
+        gridPane.setAlignment(Pos.CENTER);
+        gridPane.setHgap(10);
+        gridPane.setVgap(10);
+
+        Button btAdd = new Button("Add");
+        btAdd.setMinWidth(80);
+        Button btDelete = new Button("Delete");
+        btDelete.setMinWidth(80);
+        Button btFind = new Button("Find");
+        btFind.setMinWidth(80);
+        Button btReverse = new Button("Reverse");
+        btReverse.setMinWidth(80);
+        Button btnReverseRecursively = new Button("Reverse Recursively");
+        btnReverseRecursively.setMinWidth(80);
+
+        TextField tfAdd = new TextField();
+        tfAdd.setPromptText("number");
+        TextField tfDelete = new TextField();
+        tfDelete.setPromptText("number");
+        TextField tfFind = new TextField();
+        tfFind.setPromptText("number");
+
+        Label lbOut = new Label("LinkedList (0-9) ");
+
+        gridPane.addRow(0, btAdd, tfAdd);
+        gridPane.addRow(1, btDelete, tfDelete);
+        gridPane.addRow(2, btFind, tfFind);
+        gridPane.addRow(3, btReverse, btnReverseRecursively);
+        gridPane.addRow(4, lbOut);
+
+        btAdd.setOnAction(event -> {
+            try {
+                int num = parseInt(tfAdd.getText());
+                list.insert(num);
+                lbOut.setText("added " + num);
+                btAdd.setStyle("-fx-background-color: lightgreen");
+            }catch (NumberFormatException e){
+                lbOut.setText("incorrect input");
+                btAdd.setStyle("-fx-background-color: lightpink");
+            }
+        });
+
+        btDelete.setOnAction(event -> {
+            if(tfDelete.getText().isEmpty() || tfDelete.getText().isBlank()) {
+                lbOut.setText("Empty");
+                lbOut.setStyle("-fx-text-fill: red");
+                return;
+            }
+            int num = parseInt(tfDelete.getText());
+            if(list.delete(num)) {
+                lbOut.setText("deleted " + num);
+                btDelete.setStyle("-fx-background-color: lightgreen");
+            }else{
+                lbOut.setText("not found");
+                btDelete.setStyle("-fx-background-color: lightpink");
+            }
+        });
+
+        btFind.setOnAction(event -> {
+            if(tfFind.getText().isEmpty() || tfFind.getText().isBlank()) {
+                lbOut.setText("Empty");
+                lbOut.setStyle("-fx-text-fill: red");
+                return;
+            }
+            try {
+                int num = parseInt(tfFind.getText());
+                if (list.find(num)) {
+                    lbOut.setText("Number Found");
+                    lbOut.setStyle("-fx-text-fill: green");
+                }else{
+                    lbOut.setText("Not Found");
+                    lbOut.setStyle("-fx-text-fill: red");
+                }
+            }catch (NumberFormatException e){
+                lbOut.setText("incorrect input");
+                lbOut.setStyle("-fx-text-fill: red");
+            }
+        });
+
+        btReverse.setOnAction(event -> {
+            list.reverse();
+            lbOut.setText("Reversed");
+            list.print();
+            btReverse.setStyle("-fx-background-color: lightgreen");
+        });
+
+        btnReverseRecursively.setOnAction(event -> {
+            list.reverseRecursive();
+            lbOut.setText("Reversed Recursively");
+            list.print();
+            btnReverseRecursively.setStyle("-fx-background-color: lightgreen");
+        });
+
+        vBox.getChildren().addAll(lbTitle, gridPane);
         return borderPane;
     }
 

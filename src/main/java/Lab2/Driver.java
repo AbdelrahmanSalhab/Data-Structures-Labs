@@ -10,12 +10,12 @@ public class Driver {
         list.insert(9);
         list.insert(2);
         list.insert(6);
-        list.insert(4);;
+        list.insert(4);
         list.insert(8);
         list.insert(10);
         list.print();
 
-        if(list.search(5))
+        if(list.find(5))
             System.out.println("Found");
         else
             System.out.println("Not found");

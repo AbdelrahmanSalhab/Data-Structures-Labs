@@ -52,7 +52,7 @@ public class LinkedList <T extends Comparable<T>>{
         return insertRecursive(data, current.getNext(), current);
     }
 
-    public boolean search(T data) {
+    public boolean find(T data) {
         Node<T> current = head;
         while(current != null && current.compare(data) <= 0){
             if(current.compare(data) == 0)
@@ -62,18 +62,19 @@ public class LinkedList <T extends Comparable<T>>{
         return false;
     }
 
-    public boolean searchRecursive(T data) {
+    public boolean findRecursive(T data) {
         if(head == null)
             return false;
-        return searchRecursive(data, head);
+        return findRecursive(data, head);
     }
+
     //helper method
-    private boolean searchRecursive(T data, Node<T> current) {
+    private boolean findRecursive(T data, Node<T> current) {
         if(current == null)
             return false;
         if(current.compare(data) == 0)
             return true;
-        return searchRecursive(data, current.getNext());
+        return findRecursive(data, current.getNext());
     }
 
     public boolean delete(T data){
