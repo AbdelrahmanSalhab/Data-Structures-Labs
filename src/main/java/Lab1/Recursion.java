@@ -1,6 +1,6 @@
 package Lab1;
 
-public class Lab1 {
+public class Recursion {
 
     public static void writeNums(int i, int n) {
         if (i <= n) {

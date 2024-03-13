@@ -1,4 +1,4 @@
-package Labs;
+package Lab0;
 
 public class Name implements Comparable<Name> {
     private String name;

@@ -1,4 +1,4 @@
-package Labs;
+package Lab0;
 
 public interface Listable <T extends Comparable<T>> {
     boolean isEmpty();

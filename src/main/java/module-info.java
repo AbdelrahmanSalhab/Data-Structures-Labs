@@ -3,6 +3,6 @@ module com.example.structurelabs {
     requires javafx.fxml;
 
 
-    exports Labs;
-    opens Labs to javafx.fxml;
+    exports LabTabs;
+    opens LabTabs to javafx.fxml;
 }

@@ -1,4 +1,4 @@
-package Labs;
+package LabTabs;
 
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -9,6 +9,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import Lab0.*;
 import Lab1.*;
 import Lab2.*;
 
@@ -191,7 +192,7 @@ public class LabTabs extends Application {
             lbOut.setText("Empty");
             btReverse.setStyle("-fx-background-color: lightpink");
         }else{
-            lbOut.setText(Lab1.inverseReturn(tfReverse.getText()));
+            lbOut.setText(Recursion.inverseReturn(tfReverse.getText()));
             btReverse.setStyle("-fx-background-color: lightgreen");
         }
         });
@@ -203,8 +204,8 @@ public class LabTabs extends Application {
 
             }else{
                 try {
-                    int num = parseInt(Lab1.inverseReturn(tfSumOfDigits.getText()));
-                    lbOut.setText(String.valueOf(Lab1.sumOfDigits(num)));
+                    int num = parseInt(Recursion.inverseReturn(tfSumOfDigits.getText()));
+                    lbOut.setText(String.valueOf(Recursion.sumOfDigits(num)));
                     btSumOfDigits.setStyle("-fx-background-color: lightgreen");
                 }catch (NumberFormatException e){
                     lbOut.setText("incorrect input");
@@ -231,7 +232,7 @@ public class LabTabs extends Application {
                         arr[i] = parseInt(arrStr[i]);
 
                     int target = parseInt(tfTarget.getText());
-                    int index = Lab1.binarySearch(arr,target);
+                    int index = Recursion.binarySearch(arr,target);
                     if(index == -1) {
                         lbOut.setText("Not Found");
                         btBinarySearch.setStyle("-fx-background-color: lightpink");

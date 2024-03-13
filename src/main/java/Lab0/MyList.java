@@ -1,4 +1,4 @@
-package Labs;
+package Lab0;
 
 public class MyList <T extends Comparable<T>> implements Listable<T> {
 
