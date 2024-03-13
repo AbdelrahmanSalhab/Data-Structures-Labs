@@ -268,7 +268,7 @@ public class LabTabs extends Application {
         gridPane.setHgap(10);
         gridPane.setVgap(10);
 
-        Button btAdd = new Button("Add");
+        Button btAdd = new Button("Insert");
         btAdd.setMinWidth(80);
         Button btDelete = new Button("Delete");
         btDelete.setMinWidth(80);
@@ -286,13 +286,13 @@ public class LabTabs extends Application {
         TextField tfFind = new TextField();
         tfFind.setPromptText("number");
 
-        Label lbOut = new Label("LinkedList (0-9) ");
+        Label lbOut = new Label("Linked List implemented (0-9) ");
 
         gridPane.addRow(0, btAdd, tfAdd);
         gridPane.addRow(1, btDelete, tfDelete);
         gridPane.addRow(2, btFind, tfFind);
         gridPane.addRow(3, btReverse, btnReverseRecursively);
-        gridPane.addRow(4, lbOut);
+        gridPane.add(lbOut,1,4);
 
         btAdd.setOnAction(event -> {
             try {
