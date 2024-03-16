@@ -125,12 +125,13 @@ public class LinkedList <T extends Comparable<T>>{
         head = reverseRecursive(head, null);
     }
 
-    private Node<T> reverseRecursive(Node<T> head, Node<T> o) {
-        if(head == null)
-            return o;
-        Node<T> next = head.getNext();
-        head.setNext(o);
-        return reverseRecursive(next, head);
+    //helper method
+    private Node<T> reverseRecursive(Node<T> curr, Node<T> prev) {
+        if(curr == null)
+            return prev;
+        Node<T> next = curr.getNext();
+        curr.setNext(prev);
+        return reverseRecursive(next, curr);
     }
 
 }
