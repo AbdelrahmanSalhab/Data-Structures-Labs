@@ -1,13 +1,13 @@
-package Lab2;
+package Lab3;
 
-public class LinkedList <T extends Comparable<T>>{
+public class DLinkedList<T extends Comparable<T>>{
 
     private Node<T> head;
 
     public void insert (T data){
         Node<T> newNode = new Node<>(data);
-        Node <T> current = head;
-        Node <T> previous = null;
+        Node<T> current = head;
+        Node<T> previous = null;
 
         for(; current != null && current.compare(data) < 0; previous = current, current = current.getNext());
 
@@ -15,11 +15,14 @@ public class LinkedList <T extends Comparable<T>>{
             head = newNode;
         } else if(current == null) {    // case 1 : insert at the end
             previous.setNext(newNode);
+            newNode.setPrev(previous);
         } else if(previous == null){    // case 2 : insert at the beginning
             newNode.setNext(head);
             head = newNode;
         } else {    // case 3 : insert in the middle
+            current.setPrev(newNode);
             newNode.setNext(current);
+            newNode.setPrev(previous);
             previous.setNext(newNode);
         }
     }
