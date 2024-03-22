@@ -3,29 +3,24 @@ package Lab3;
 public class Driver {
     public static void main(String[] args) {
         DLinkedList<Integer> list = new DLinkedList<>();
-        list.insert(5);
-        list.insert(3);
-        list.insert(7);
         list.insert(1);
+        list.insert(5);
+        list.insert(7);
         list.insert(9);
         list.insert(2);
-        list.insert(6);
         list.insert(4);
+
         list.insert(8);
         list.insert(10);
-        list.print();
+        list.insert(3);
+        list.insert(3);
+        list.insert(3);
+        list.insert(3);
 
-        if(list.find(5))
-            System.out.println("Found");
-        else
-            System.out.println("Not found");
+        list.traverse();
+        list.removeDuplicatesRecursive();
+        list.reverseRecursive();
+        list.traverse();
 
-        if(list.delete(5))
-            System.out.println("Deleted 5");
-        else
-            System.out.println("5 not found");
-        list.print();
-        list.reverse();
-        list.print();
     }
 }

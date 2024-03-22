@@ -1,62 +1,38 @@
 package Lab3;
 
+import Lab2.Node;
+
 public class DLinkedList<T extends Comparable<T>>{
 
-    private Node<T> head;
+    private DNode<T> head;
 
-    public void insert (T data){
-        Node<T> newNode = new Node<>(data);
-        Node<T> current = head;
-        Node<T> previous = null;
+    public void insert(T data){
+        DNode<T>  newNode = new DNode<>(data);
+        DNode<T> curr = head;
 
-        for(; current != null && current.compare(data) < 0; previous = current, current = current.getNext());
+        for( ; curr != null && curr.compare(data) < 0 && curr.getNext()!=null ; curr = curr.getNext());
 
-        if(previous == null && current == null){    // case 0 : empty list
+        if(curr == null) // case 0: empty list
             head = newNode;
-        } else if(current == null) {    // case 1 : insert at the end
-            previous.setNext(newNode);
-            newNode.setPrev(previous);
-        } else if(previous == null){    // case 2 : insert at the beginning
-            newNode.setNext(head);
+        else if(curr.compare(data)>=0 && curr.getPrev()==null){ // case 1: insert at first
+            newNode.setNext(curr);
+            curr.setPrev(newNode);
             head = newNode;
-        } else {    // case 3 : insert in the middle
-            current.setPrev(newNode);
-            newNode.setNext(current);
-            newNode.setPrev(previous);
-            previous.setNext(newNode);
         }
-    }
-
-    public void insertRecursive(T data){
-        insertRecursive(data, head, null);
-    }
-    //helper method
-    private Node<T> insertRecursive(T data, Node<T> current, Node<T> previous) {
-        if(current == null){
-            Node<T> newNode = new Node<>(data);
-            if(previous == null){    // case 0 : empty list
-                head = newNode;
-            } else {    // case 1 : insert at the end
-                previous.setNext(newNode);
-            }
-            return newNode;
+        else if(curr.compare(data)<0 && curr.getNext() == null){ // case 3: insert at last
+            newNode.setPrev(curr);
+            curr.setNext(newNode);
         }
-
-        if(current.compare(data) > 0){
-            Node<T> newNode = new Node<>(data);
-            newNode.setNext(current);
-            if(previous == null){
-                head = newNode;
-            } else {
-                previous.setNext(newNode);
-            }
-            return newNode;
+        else { // case 2: insert between
+            newNode.setNext(curr);
+            newNode.setPrev(curr.getPrev());
+            curr.getPrev().setNext(newNode);
+            curr.setPrev(newNode);
         }
-        return insertRecursive(data, current.getNext(), current);
     }
 
     public boolean find(T data) {
-        Node<T> current = head;
+        DNode<T> current = head;
         while(current != null && current.compare(data) <= 0){
             if(current.compare(data) == 0)
                 return true;
@@ -72,8 +48,8 @@ public class DLinkedList<T extends Comparable<T>>{
     }
 
     //helper method
-    private boolean findRecursive(T data, Node<T> current) {
-        if(current == null)
+    private boolean findRecursive(T data, DNode<T> current) {
+        if(current == null || current.compare(data) > 0)
             return false;
         if(current.compare(data) == 0)
             return true;
@@ -81,60 +57,152 @@ public class DLinkedList<T extends Comparable<T>>{
     }
 
     public boolean delete(T data){
-        Node<T> current = head;
-        Node<T> previous = null;
-        while(current != null){
-            if(current.compare(data) == 0){
-                if(previous == null){    // case 1 : delete at the beginning
-                    head = current.getNext();
-                } else {     // case 2 : delete in the middle or at the end
-                    previous.setNext(current.getNext());
-                }
-                return true;
+        DNode<T> curr = head;
+        while(curr!=null && curr.compare(data)<=0){
+            if(curr.compare(data)==0)
+                break;
+            curr = curr.getNext();
+        }
+
+        if(curr != null && curr.compare(data)==0){ // found
+            if(curr.getPrev()==null && curr.getNext()==null) // case 0: delete one item
+                head = null;
+            else if(curr.getPrev() == null){ // case 1: delete 1st item
+                curr.getNext().setPrev(null);
+                head = curr.getNext();
             }
-            if(current.compare(data) > 0) // case 3 : data not found
-                return false;
-            previous = current;
-            current = current.getNext();
+            else if(curr.getNext() == null) { // case 3: delete last item
+                curr.getPrev().setNext(null);
+            }
+            else {  // case 2: delete between
+                curr.getPrev().setNext(curr.getNext());
+                curr.getNext().setPrev(curr.getPrev());
+            }
+            return true;
         }
         return false;
     }
 
-    public void print(){
-        Node<T> current = head;
+    public void traverse(){
+        DNode<T> current = head;
         System.out.print("Head --> ");
         while(current != null){
-            System.out.print(current + " --> ");
+            System.out.print(current + " <--> ");
             current = current.getNext();
         }
         System.out.println("null");
     }
 
-    public void reverse(){
-        Node<T> current = head;
-        Node<T> previous = null;
-        Node<T> next = null;
+    public void traverseReverse(){
+        DNode<T> current = head;
 
-        while(current != null){
-            next = current.getNext();
-            current.setNext(previous);
-            previous = current;
-            current = next;
+        while(current!=null && current.getNext() != null){
+            current = current.getNext();
         }
-        head = previous;
+        System.out.print("null <-- ");
+
+        while(current!=head && current != null){
+            System.out.print(current + " <--> ");
+            current = current.getPrev();
+        }
+        if(current == null)
+            System.out.println(" Head");
+        else
+            System.out.println(current + " <-- Head");
+    }
+
+    public void traverseReverseRecursive(){
+        System.out.print("null <-- ");
+        traverseReverseRecursive(head);
+        System.out.println(" Head");
+    }
+    // helper method
+    private void traverseReverseRecursive(DNode<T> curr){
+        if(curr!=null){
+            traverseReverseRecursive(curr.getNext());
+            System.out.print(curr + " <--> ");
+        }
+    }
+
+    public void reverse(){
+        DNode<T> current = head;
+        DNode<T> previous = null;
+
+        while (current != null) {
+            previous = current.getPrev();
+            current.setPrev(current.getNext());
+            current.setNext(previous);
+            current = current.getPrev();
+        }
+        if (previous != null) {
+            head = previous.getPrev();
+        }
     }
 
     public void reverseRecursive(){
-        head = reverseRecursive(head, null);
+        head = reverseRecursive(head);
     }
 
     //helper method
-    private Node<T> reverseRecursive(Node<T> curr, Node<T> prev) {
-        if(curr == null)
-            return prev;
-        Node<T> next = curr.getNext();
-        curr.setNext(prev);
-        return reverseRecursive(next, curr);
+    private DNode<T> reverseRecursive(DNode<T> curr) {
+        if(curr.getNext() == null) {
+            curr.setNext(curr.getPrev());
+            curr.setPrev(null);
+            return curr;
+        }
+        DNode<T> next = curr.getNext();
+        curr.setNext(curr.getPrev());
+        curr.setPrev(next);
+        return reverseRecursive(curr.getPrev());
+    }
+
+    public int length(){
+        DNode<T> current = head;
+        int count = 0;
+        while(current != null){
+            count++;
+            current = current.getNext();
+        }
+        return count;
+    }
+
+    public int lengthRecursive(){
+        return lengthRecursive(head);
+    }
+    // helper method
+    private int lengthRecursive(DNode<T> current){
+        if(current == null)
+            return 0;
+        return 1 + lengthRecursive(current.getNext());
+
+    }
+
+    public void removeDuplicates(){
+        DNode<T> curr = head;
+        while(curr!=null && curr.getNext()!=null){
+            if(curr.compare(curr.getNext().getData()) == 0){
+                delete(curr.getData());
+                System.out.println(curr.getData() + " deleted duplicate");
+            }
+            curr = curr.getNext();
+        }
+    }
+
+    public void removeDuplicatesRecursive(){
+        DNode<T> curr = head;
+        removeDuplicatesRecursive(curr);
+
+    }
+
+    //helper method
+    private void removeDuplicatesRecursive(DNode<T> curr){
+        if(curr==null || curr.getNext()==null)
+            return;
+        else if(curr.compare(curr.getNext().getData()) == 0){
+            delete(curr.getData());
+            System.out.println(curr.getData() + " deleted duplicate");
+        }
+        removeDuplicatesRecursive(curr.getNext());
     }
 
 }
