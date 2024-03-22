@@ -365,7 +365,7 @@ public class LabTabs extends Application {
         return borderPane;
     }
 
-public BorderPane lab3(){
+    public BorderPane lab3(){
         DLinkedList<Integer> list = new DLinkedList<>();
         for (int i = 0; i < 10; i++) {
             list.insert(i);
