@@ -15,8 +15,8 @@ public class Driver {
         cursor.insertAtHead(2, winterList);
         cursor.insertAtHead(5, winterList);
 
-        cursor.mergeLists(summerList,winterList);
-        cursor.traversList(summerList);
+//        cursor.mergeLists(summerList,winterList);
+//        cursor.traversList(summerList);
 
     }
 

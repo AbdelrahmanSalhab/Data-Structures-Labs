@@ -114,15 +114,12 @@ public class CursorArray<T extends Comparable<T>> {
     }
 
     public void removeList(int l){
-        if(isEmpty(l))
-            free(l);
-        else{
-            while(!isLast(l)){
-                int p = cursorArray[l].next;
-                cursorArray[l].next = cursorArray[p].next;
-                free(p);
-            }
+        while(!isLast(l)){
+            int p = cursorArray[l].next;
+            cursorArray[l].next = cursorArray[p].next;
+            free(p);
         }
+        free(l);
     }
 
     public void removeListRec(int l){
