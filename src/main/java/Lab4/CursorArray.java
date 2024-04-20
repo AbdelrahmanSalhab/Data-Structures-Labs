@@ -3,9 +3,11 @@ package Lab4;
 public class CursorArray<T extends Comparable<T>> {
 
     private CNode<T>[] cursorArray;
+    private int capacity;
 
     public CursorArray(int capacity) {
         cursorArray = new CNode[capacity];
+        this.capacity = capacity;
         initialization();
     }
 
@@ -28,7 +30,7 @@ public class CursorArray<T extends Comparable<T>> {
     }
 
     public boolean isNull(int l){
-        return cursorArray[l]==null;
+        return cursorArray[l] == null;
     }
     public boolean isEmpty(int l){
         return cursorArray[l].next == 0;
@@ -52,6 +54,30 @@ public class CursorArray<T extends Comparable<T>> {
         int p = malloc();
         if(p!=0){
             cursorArray[p] = new CNode<T>(data, cursorArray[l].next );
+            cursorArray[l].next = p;
+        }
+        else
+            System.out.println("Error: Out of space!!!");
+    }
+
+    public void sortedInsert(T data, int l){
+        if(isNull(l)) // list not created
+            return;
+        if(isEmpty(l)) { // list empty
+            insertAtHead(data, l);
+            return;
+        }
+
+        int p = malloc();
+        if(p!=0){
+            CNode<T> next = cursorArray[cursorArray[l].next];
+            for(; next.data!=null &&
+                 data.compareTo(next.data) > 0 ;
+                        l = cursorArray[l].next,
+                        next = cursorArray[cursorArray[l].next]
+            );
+
+            cursorArray[p] = new CNode<>(data, cursorArray[l].next);
             cursorArray[l].next = p;
         }
         else
@@ -85,13 +111,41 @@ public class CursorArray<T extends Comparable<T>> {
         return -1; // not found
     }
 
-    public CNode<T> delete(T data, int l) {
+    public boolean delete(T data, int l) {
         int p = findPrevious(data, l);
         if (p != -1) {
             int c = cursorArray[p].next;
             CNode<T> temp = cursorArray[c];
             cursorArray[p].next = temp.next;
             free(c);
+            return true;
+        }
+        return false;
+    }
+
+    public T deleteFirst(int l) {
+        int p = cursorArray[l].getNext();
+        if (p != 0) {
+            int c = cursorArray[p].getNext();
+            cursorArray[l].setNext(c);
+            free(p);
+            return cursorArray[p].getData();
+        }
+        return null;
+    }
+
+    public T deleteLast(int l) {
+        int current = l;
+        int previous = l;
+
+        while (!isNull(l)) {
+            if (isLast(current)) {
+                free(current);
+                cursorArray[previous].setNext(0);
+                return cursorArray[current].getData();
+            }
+            previous = current;
+            current = cursorArray[current].getNext();
         }
         return null;
     }
@@ -135,13 +189,35 @@ public class CursorArray<T extends Comparable<T>> {
 
     public void mergeLists(int l1, int l2){
 
-        while(!isLast(l1)){
-            l1 = cursorArray[l1].next;
-        }
+        for(; !isLast(l1); l1 = cursorArray[l1].next);
+
         int unwantedDummy = l2;
         l2 = cursorArray[l2].next;
         free(unwantedDummy);
         cursorArray[l1].setNext(l2);
     }
 
+    // returns the index for the new merged sorted list
+    public int mergeAndSortLists(int l1, int l2){
+        CursorArray<T> cursor = new CursorArray<>(capacity);
+        int newList = cursor.createList();
+
+        l1 = cursorArray[l1].next;
+        while(cursorArray[l1].data != null){
+            cursor.sortedInsert(cursorArray[l1].data, newList);
+            l1 = cursorArray[l1].next;
+        }
+
+        l2 = cursorArray[l2].next;
+        while(cursorArray[l2].data != null){
+            cursor.sortedInsert(cursorArray[l2].data, newList);
+            l2 = cursorArray[l2].next;
+        }
+        cursorArray = cursor.cursorArray;
+        return newList;
+    }
+
+    public CNode<T>[] getCursorArray() {
+        return cursorArray;
+    }
 }

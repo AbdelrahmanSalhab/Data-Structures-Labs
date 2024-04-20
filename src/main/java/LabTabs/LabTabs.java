@@ -1,7 +1,12 @@
 package LabTabs;
 
 import Lab3.DLinkedList;
+import Lab4.CursorArray;
+import Lab6.Market;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -28,13 +33,19 @@ public class LabTabs extends Application {
         Tab tablab1 = new Tab("Lab 1");
         Tab tablab2 = new Tab("Lab 2");
         Tab tablab3 = new Tab("Lab 3");
+        Tab tablab4 = new Tab("Lab 4");
+        Tab tablab5 = new Tab("Lab 5");
+        Tab tablab6 = new Tab("Lab 6");
 
         tablab0.setContent(lab0());
         tablab1.setContent(lab1());
         tablab2.setContent(lab2());
         tablab3.setContent(lab3());
-        tabPane.getTabs().addAll(tablab0,tablab1,tablab2,tablab3);
-        Scene scene = new Scene(tabPane, 600, 350);
+        tablab4.setContent(lab4());
+        tablab5.setContent(lab5());
+        tablab6.setContent(lab6());
+        tabPane.getTabs().addAll(tablab0,tablab1,tablab2,tablab3,tablab4,tablab5,tablab6);
+        Scene scene = new Scene(tabPane, 600, 400);
         stage.setScene(scene);
         stage.setTitle("Data Structures' Laboratories");
         stage.setAlwaysOnTop(true);
@@ -138,6 +149,7 @@ public class LabTabs extends Application {
         borderPane.setCenter(gridPane);
         return borderPane;
     }
+
 
     public BorderPane lab1(){
         BorderPane borderPane = new BorderPane();
@@ -253,6 +265,7 @@ public class LabTabs extends Application {
         return borderPane;
     }
 
+
     public BorderPane lab2(){
         LinkedList<Integer> list = new LinkedList<>();
         for (int i = 0; i < 10; i++) {
@@ -365,6 +378,7 @@ public class LabTabs extends Application {
         return borderPane;
     }
 
+
     public BorderPane lab3(){
         DLinkedList<Integer> list = new DLinkedList<>();
         for (int i = 0; i < 10; i++) {
@@ -376,7 +390,7 @@ public class LabTabs extends Application {
         vBox.setAlignment(Pos.CENTER);
         borderPane.setCenter(vBox);
 
-        Label lbTitle = new Label("Lab2 : Linked List");
+        Label lbTitle = new Label("Lab3 : DoubleLinked List");
         lbTitle.setFont(Font.font(20));
 
         GridPane gridPane = new GridPane();
@@ -475,6 +489,284 @@ public class LabTabs extends Application {
 
         vBox.getChildren().addAll(lbTitle, gridPane);
         return borderPane;
+    }
+
+
+    public BorderPane lab4(){
+        CursorArray<Integer> cursor = new CursorArray<>(50);
+        int[] listOfLists = new int[49];
+
+        BorderPane borderPane = new BorderPane();
+        VBox vBox = new VBox(10);
+        vBox.setAlignment(Pos.CENTER);
+        borderPane.setCenter(vBox);
+
+        Label lbTitle = new Label("Lab4 : Cursor Array");
+        lbTitle.setFont(Font.font(20));
+
+        GridPane gridPane = new GridPane();
+        gridPane.setAlignment(Pos.CENTER);
+        gridPane.setHgap(10);
+        gridPane.setVgap(10);
+
+        Button btInsert = new Button("Insert Sorted");
+        btInsert.setMinWidth(80);
+        Button btDelete = new Button("Delete");
+        btDelete.setMinWidth(80);
+        Button btFind = new Button("Find");
+        btFind.setMinWidth(80);
+        Button btMergeSorted = new Button("Merge Sorted");
+        btMergeSorted.setMinWidth(80);
+        Button btCreateList = new Button("Create List");
+        btMergeSorted.setMinWidth(80);
+
+        TextField tfInsert = new TextField();
+        tfInsert.setPromptText("number");
+        TextField tfDelete = new TextField();
+        tfDelete.setPromptText("number");
+        TextField tfFind = new TextField();
+        tfFind.setPromptText("number");
+        TextField tfListNums = new TextField();
+        tfListNums.setPromptText("list number(s)");
+
+        Label lbOut = new Label("CA capacity 50");
+
+        gridPane.addRow(0, new Label() ,tfListNums);
+        gridPane.addRow(1, btInsert, tfInsert);
+        gridPane.addRow(2, btDelete, tfDelete);
+        gridPane.addRow(3, btFind, tfFind);
+        gridPane.addRow(4, btMergeSorted,btCreateList);
+        gridPane.addRow(5, new Label(), lbOut );
+
+        btInsert.setOnAction(event -> {
+            try {
+                if(tfInsert.getText().isEmpty() || tfInsert.getText().isBlank() || tfListNums.getText().isEmpty() || tfListNums.getText().isBlank()) {
+                    lbOut.setText("Empty");
+                    lbOut.setStyle("-fx-text-fill: red");
+                    return;
+                }
+                int num = parseInt(tfInsert.getText());
+                String[] lists = tfListNums.getText().split(" ");
+                int list = parseInt(lists[0]);
+
+                if(!findList(list,listOfLists))
+                    throw new IllegalArgumentException();
+                if (list < 1)
+                    throw new IllegalArgumentException();
+
+                cursor.sortedInsert(num,listOfLists[list-1]);
+                lbOut.setText("added " + num + " to list " + list);
+                btInsert.setStyle("-fx-background-color: lightgreen");
+                cursor.traversList(listOfLists[list-1]);
+            }catch (NumberFormatException e){
+                lbOut.setText("incorrect input");
+                btInsert.setStyle("-fx-background-color: lightpink");
+            }catch (IllegalArgumentException e){
+                lbOut.setText("incorrect list");
+                btInsert.setStyle("-fx-background-color: lightpink");
+            }
+        });
+
+        btDelete.setOnAction(event -> {
+            try {
+                if (tfDelete.getText().isEmpty() || tfDelete.getText().isBlank() || tfListNums.getText().isEmpty() || tfListNums.getText().isBlank()) {
+                    lbOut.setText("Empty");
+                    lbOut.setStyle("-fx-text-fill: red");
+                    return;
+                }
+                int num = parseInt(tfDelete.getText());
+                String[] lists = tfListNums.getText().split(" ");
+                int list = parseInt(lists[0]);
+
+                if (!findList(list, listOfLists))
+                    throw new IllegalArgumentException();
+                if (list < 1)
+                    throw new IllegalArgumentException();
+
+                if (cursor.delete(num, listOfLists[list - 1])) {
+                    lbOut.setText("deleted " + num + "from list" + list);
+                    btDelete.setStyle("-fx-background-color: lightgreen");
+                    cursor.traversList(listOfLists[list-1]);
+                } else {
+                    lbOut.setText("not found");
+                    btDelete.setStyle("-fx-background-color: lightpink");
+                }
+            }catch (NumberFormatException e){
+                lbOut.setText("incorrect input");
+                btDelete.setStyle("-fx-background-color: lightpink");
+            }catch (IllegalArgumentException e){
+                lbOut.setText("incorrect list");
+                btDelete.setStyle("-fx-background-color: lightpink");
+            }
+        });
+
+        btFind.setOnAction(event -> {
+            if(tfFind.getText().isEmpty() || tfFind.getText().isBlank() || tfListNums.getText().isEmpty() || tfListNums.getText().isBlank()) {
+                lbOut.setText("Empty");
+                lbOut.setStyle("-fx-text-fill: red");
+                return;
+            }
+            try {
+                int num = parseInt(tfFind.getText());
+                String[] lists = tfListNums.getText().split(" ");
+                int list = parseInt(lists[0]);
+
+                if(!findList(list,listOfLists))
+                    throw new IllegalArgumentException();
+                if (list < 1)
+                    throw new IllegalArgumentException();
+
+
+                int foundIndex = cursor.find(num, listOfLists[list - 1]);
+                if (foundIndex !=-1) {
+                    lbOut.setText("Number Found at L = " + foundIndex);
+                    lbOut.setStyle("-fx-text-fill: green");
+                }else{
+                    lbOut.setText("Not Found");
+                    lbOut.setStyle("-fx-text-fill: red");
+                }
+            }catch (NumberFormatException e){
+                lbOut.setText("incorrect input");
+                lbOut.setStyle("-fx-text-fill: red");
+            }catch (IllegalArgumentException e){
+                lbOut.setText("incorrect list");
+                btFind.setStyle("-fx-background-color: lightpink");
+            }
+        });
+
+        btMergeSorted.setOnAction(event -> {
+            try {
+                if(tfListNums.getText().isEmpty() || tfListNums.getText().isBlank()) {
+                    lbOut.setText("Empty");
+                    lbOut.setStyle("-fx-text-fill: red");
+                    return;
+                }
+                String[] lists = tfListNums.getText().split(" ");
+                if(lists.length != 2){
+                    lbOut.setText("Insert 2 Lists");
+                    btMergeSorted.setStyle("-fx-background-color: lightpink");
+                    return;
+                }
+                int list1 = parseInt(lists[0]);
+                int list2 = parseInt(lists[1]);
+
+                if(!findList(list1,listOfLists))
+                    throw new IllegalArgumentException();
+                if(!findList(list2,listOfLists))
+                    throw new IllegalArgumentException();
+                if (list1 < 1 || list2 < 1)
+                    throw new IllegalArgumentException();
+
+                int[] newList = new int[49];
+                newList[0] = cursor.mergeAndSortLists(listOfLists[list1-1] ,listOfLists[list2-1]);
+                updateListOfLists(listOfLists,newList);
+                lbOut.setText("Merged !");
+                btMergeSorted.setStyle("-fx-background-color: lightgreen");
+                cursor.traversList(newList[0]);
+            }catch (NumberFormatException e){
+                lbOut.setText("incorrect input");
+                btMergeSorted.setStyle("-fx-background-color: lightpink");
+            }catch (IllegalArgumentException e){
+                lbOut.setText("incorrect list");
+                btMergeSorted.setStyle("-fx-background-color: lightpink");
+            }
+        });
+
+        btCreateList.setOnAction(event -> {
+            int l = cursor.createList();
+            int numOfLists = numOfLists(listOfLists);
+            if(numOfLists == 49 || l == 0){
+                lbOut.setText("Full");
+                lbOut.setStyle("-fx-text-fill: red");
+                return;
+            }
+            listOfLists[numOfLists] = l;
+            lbOut.setText("Created List " + numOfLists + " !");
+            lbOut.setStyle("-fx-text-fill: green");
+        });
+
+        vBox.getChildren().addAll(lbTitle, gridPane);
+        return borderPane;
+    }
+
+
+    public BorderPane lab5(){
+        BorderPane borderPane = new BorderPane();
+        VBox vBox = new VBox(10);
+        vBox.setPadding(new Insets(40));
+        vBox.setAlignment(Pos.TOP_CENTER);
+        borderPane.setCenter(vBox);
+
+        Label lbTitle = new Label("Lab5 : Stack");
+        lbTitle.setFont(Font.font(20));
+
+        GridPane gridPane = new GridPane();
+        gridPane.setAlignment(Pos.CENTER);
+        gridPane.setHgap(15);
+        gridPane.setVgap(15);
+
+        TextField tfExpression = new TextField();
+        tfExpression.setMaxWidth(110);
+        tfExpression.setPromptText("Enter Expression");
+
+        Button btPostfix = new Button("PostFix");
+        btPostfix.setMinWidth(80);
+        Button btPreFix = new Button("PreFix");
+        btPreFix.setMinWidth(80);
+        Button btEvaluate = new Button("Evaluate");
+        btEvaluate.setMinWidth(80);
+
+        Label lbOut = new Label("Stack implemented");
+
+        gridPane.addRow(0, btPreFix, btPostfix, btEvaluate);
+        vBox.getChildren().addAll(lbTitle, tfExpression, gridPane,lbOut);
+        return borderPane;
+    }
+
+
+    public BorderPane lab6(){
+        Market market = new Market(10);
+
+        BorderPane borderPane = new BorderPane();
+        VBox vBox = new VBox(10);
+        vBox.setAlignment(Pos.CENTER);
+        borderPane.setCenter(vBox);
+
+        Label lbTitle = new Label("Lab6 : Queue");
+        lbTitle.setFont(Font.font(20));
+
+        Button btStart = new Button("Start");
+        btStart.setMinWidth(80);
+
+        TextArea taOut = new TextArea();
+        taOut.setEditable(false);
+        taOut.setPrefRowCount(14);
+
+        btStart.setOnAction(event -> {
+            taOut.setText(market.process());
+        });
+
+        vBox.getChildren().addAll(lbTitle, btStart, taOut);
+        return borderPane;
+    }
+
+
+    boolean findList (int l , int[] listOfLists){
+        return l <= numOfLists(listOfLists);
+    }
+
+    int numOfLists (int[] listOfLists){
+        int count =0;
+        for (int i = 0; i < listOfLists.length; i++) {
+            if(listOfLists[i] == 0)
+                return count;
+            count++;
+        }
+        return count;
+    }
+
+    void updateListOfLists(int[] listOfLists, int[] newList){
+        listOfLists = newList;
     }
 
     public static void main(String[] args){ launch(args); }

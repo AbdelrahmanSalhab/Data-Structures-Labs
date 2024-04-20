@@ -23,6 +23,14 @@ public class Node <T extends Comparable<T>> {
         this.next = next;
     }
 
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
+        this.data = data;
+    }
+
     public int compare(T data) {
         return this.data.compareTo(data);
     }
