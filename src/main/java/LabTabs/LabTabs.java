@@ -3,6 +3,7 @@ package LabTabs;
 import Lab3.DLinkedList;
 import Lab4.CursorArray;
 import Lab6.Market;
+import Lab7.Manager;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -36,6 +37,7 @@ public class LabTabs extends Application {
         Tab tablab4 = new Tab("Lab 4");
         Tab tablab5 = new Tab("Lab 5");
         Tab tablab6 = new Tab("Lab 6");
+        Tab tablab7 = new Tab("Lab 7");
 
         tablab0.setContent(lab0());
         tablab1.setContent(lab1());
@@ -44,7 +46,8 @@ public class LabTabs extends Application {
         tablab4.setContent(lab4());
         tablab5.setContent(lab5());
         tablab6.setContent(lab6());
-        tabPane.getTabs().addAll(tablab0,tablab1,tablab2,tablab3,tablab4,tablab5,tablab6);
+        tablab7.setContent(lab7());
+        tabPane.getTabs().addAll(tablab0,tablab1,tablab2,tablab3,tablab4,tablab5,tablab6, tablab7);
         Scene scene = new Scene(tabPane, 600, 400);
         stage.setScene(scene);
         stage.setTitle("Data Structures' Laboratories");
@@ -751,11 +754,36 @@ public class LabTabs extends Application {
     }
 
 
+    public BorderPane lab7(){
+        Manager manager = new Manager();
+        BorderPane borderPane = new BorderPane();
+        VBox vBox = new VBox(10);
+        vBox.setAlignment(Pos.CENTER);
+        borderPane.setCenter(vBox);
+
+        Label lbTitle = new Label("Lab7 : Binary Search Tree");
+        lbTitle.setFont(Font.font(20));
+
+        Button btPrint = new Button("Print");
+
+        btPrint.setOnAction(event -> {
+            manager.readFile();
+            System.out.println("\nDistricts: ");
+            Manager.getDistricts().traverseInOrder();
+            System.out.println("\n\nLocations: ");
+            Manager.getDistricts().smallest().getData().getLocations().traverseInOrder();
+        });
+
+        vBox.getChildren().addAll(lbTitle, btPrint);
+        return borderPane;
+    }
+
+
     boolean findList (int l , int[] listOfLists){
         return l <= numOfLists(listOfLists);
     }
 
-    int numOfLists (int[] listOfLists){
+    int numOfLists (int[] listOfLists) {
         int count =0;
         for (int i = 0; i < listOfLists.length; i++) {
             if(listOfLists[i] == 0)
