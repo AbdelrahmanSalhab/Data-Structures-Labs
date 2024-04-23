@@ -1,4 +1,4 @@
-Data Structures Lab Work with P. Mamoun Nawahda
+Data Structures Lab Work with Professor Mamoun Nawahda
 
 Labwork is inside the src file
 
