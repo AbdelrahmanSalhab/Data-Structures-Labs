@@ -2,12 +2,12 @@ package Lab5;
 
 import Lab4.CursorArray;
 
-public class CStack<T extends Comparable<T>> implements Stackable<T> {
+public class CursorStack<T extends Comparable<T>> implements Stackable<T> {
 
     CursorArray<T> CA = new CursorArray<>(20);
     int list;
 
-    public CStack() {
+    public CursorStack() {
         list = CA.createList();
     }
 

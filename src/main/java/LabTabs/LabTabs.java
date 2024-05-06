@@ -4,6 +4,8 @@ import Lab3.DLinkedList;
 import Lab4.CursorArray;
 import Lab6.Market;
 import Lab7.Manager;
+import Lab7.TNode;
+import Lab8.AVL;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -38,6 +40,7 @@ public class LabTabs extends Application {
         Tab tablab5 = new Tab("Lab 5");
         Tab tablab6 = new Tab("Lab 6");
         Tab tablab7 = new Tab("Lab 7");
+        Tab tablab8 = new Tab("Lab 8");
 
         tablab0.setContent(lab0());
         tablab1.setContent(lab1());
@@ -47,7 +50,8 @@ public class LabTabs extends Application {
         tablab5.setContent(lab5());
         tablab6.setContent(lab6());
         tablab7.setContent(lab7());
-        tabPane.getTabs().addAll(tablab0,tablab1,tablab2,tablab3,tablab4,tablab5,tablab6, tablab7);
+        tablab8.setContent(lab8());
+        tabPane.getTabs().addAll(tablab0,tablab1,tablab2,tablab3,tablab4,tablab5,tablab6, tablab7, tablab8);
         Scene scene = new Scene(tabPane, 600, 400);
         stage.setScene(scene);
         stage.setTitle("Data Structures' Laboratories");
@@ -775,6 +779,99 @@ public class LabTabs extends Application {
         });
 
         vBox.getChildren().addAll(lbTitle, btPrint);
+        return borderPane;
+    }
+
+
+    public BorderPane lab8(){
+        AVL<Integer> tree = new AVL<>();
+
+        BorderPane borderPane = new BorderPane();
+        VBox vBox = new VBox(10);
+        vBox.setAlignment(Pos.CENTER);
+        borderPane.setCenter(vBox);
+
+        Label lbTitle = new Label("Lab8 : AVL Tree");
+        lbTitle.setFont(Font.font(20));
+
+        GridPane gridPane = new GridPane();
+        gridPane.setAlignment(Pos.CENTER);
+        gridPane.setHgap(10);
+        gridPane.setVgap(10);
+
+        Button btInsert = new Button("Insert");
+        btInsert.setMinWidth(80);
+        Button btDelete = new Button("Delete");
+        btDelete.setMinWidth(80);
+        Button btPrint = new Button("Print");
+        btPrint.setMinWidth(80);
+
+        TextField tfInsert = new TextField();
+        tfInsert.setPromptText("number");
+        TextField tfDelete = new TextField();
+        tfDelete.setPromptText("number");
+
+        Label lbOut = new Label("AVL");
+
+        gridPane.addRow(1, btInsert, tfInsert);
+        gridPane.addRow(2, btDelete, tfDelete);
+        gridPane.addRow(3, btPrint);
+        gridPane.addRow(5, new Label(), lbOut );
+
+        btInsert.setOnAction(event -> {
+            try {
+                if(tfInsert.getText().isEmpty() || tfInsert.getText().isBlank() ) {
+                    lbOut.setText("Empty");
+                    lbOut.setStyle("-fx-text-fill: red");
+                    return;
+                }
+
+                int num = parseInt(tfInsert.getText());
+
+                tree.insert(num);
+                lbOut.setText("added " + num + " to AVL Tree ");
+                btInsert.setStyle("-fx-background-color: lightgreen");
+                btPrint.fire();
+            }catch (NumberFormatException e){
+                lbOut.setText("incorrect input");
+                btInsert.setStyle("-fx-background-color: lightpink");
+            }
+        });
+
+        btDelete.setOnAction(event -> {
+            try {
+                if (tfDelete.getText().isEmpty() || tfDelete.getText().isBlank() ) {
+                    lbOut.setText("Empty");
+                    lbOut.setStyle("-fx-text-fill: red");
+                    return;
+                }
+                int num = parseInt(tfDelete.getText());
+
+                if (tree.delete(num) != null) {
+                    lbOut.setText("deleted " + num + " from AVL Tree");
+                    btDelete.setStyle("-fx-background-color: lightgreen");
+                    btPrint.fire();
+                } else {
+                    lbOut.setText("not found");
+                    btDelete.setStyle("-fx-background-color: lightpink");
+                }
+            }catch (NumberFormatException e) {
+                lbOut.setText("incorrect input");
+                btDelete.setStyle("-fx-background-color: lightpink");
+            }
+        });
+
+        btPrint.setOnAction(event -> {
+            if(tree.isEmpty()) {
+                System.out.println("Empty...");
+            }else{
+                tree.traverseInOrder();
+                System.out.println();
+            }
+
+        });
+
+        vBox.getChildren().addAll(lbTitle, gridPane);
         return borderPane;
     }
 

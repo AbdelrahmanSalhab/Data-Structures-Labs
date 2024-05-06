@@ -3,7 +3,7 @@ package Lab7;
 
 public class BinarySearchTree<T extends Comparable<T>>{
 
-    private TNode<T> root;
+    protected TNode<T> root;
 
     public BinarySearchTree() {
         root = null;
@@ -19,7 +19,7 @@ public class BinarySearchTree<T extends Comparable<T>>{
             insert(data, root);
     }
     private void insert(T data, TNode<T> node) {
-        if (data.compareTo((T) node.getData()) >= 0) { // insert into right subtree
+        if (data.compareTo( node.getData()) >= 0) { // insert into right subtree
             if (!node.hasRight())
                 node.setRight(new TNode<>(data));
             else
@@ -144,7 +144,7 @@ public class BinarySearchTree<T extends Comparable<T>>{
     }
 
     public int height() { return height(root); }
-    private int height(TNode<T> node) {
+    protected int height(TNode<T> node) {
         if (node == null) return 0;
         if (node.isLeaf()) return 1;
         int left = 0;

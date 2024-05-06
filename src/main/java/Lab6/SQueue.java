@@ -1,43 +1,47 @@
 package Lab6;
 
-import Lab5.LStack;
+import Lab5.LinkedListStack;
 
-public class SQueue <T extends Comparable<T>> implements Queue<T>{
-    private LStack<T> stack;
-    private LStack<T> temp;
+public class SQueue <T extends Comparable<T>> implements Queueable<T> {
+
+    private LinkedListStack<T> stack;
+    private LinkedListStack<T> temp;
 
     public SQueue(){
-        stack = new LStack<>();
-        temp = new LStack<>();
+        stack = new LinkedListStack<>();
+        temp = new LinkedListStack<>();
     }
 
     @Override
     public void enqueue(T data){
         while (!stack.isEmpty()) {
-            temp.push(stack.pop().getData());
+            temp.push(stack.pop());
         }
         stack.push(data);
         while (!temp.isEmpty()) {
-            stack.push(temp.pop().getData());
+            stack.push(temp.pop());
         }
     }
 
     @Override
     public T dequeue(){
-        T data = null;
-        if(!stack.isEmpty()){
-            data = stack.pop().getData();
-        }
-        return data;
+        return stack.pop();
     }
 
     @Override
     public T getFront(){
-        T data = null;
-        if(!stack.isEmpty()){
-            data = stack.peek().getData();
-        }
-        return data;
+        return stack.peek();
     }
+
+    @Override
+    public boolean isEmpty() {
+        return stack.isEmpty();
+    }
+
+    @Override
+    public void clear() {
+        stack.clear();
+    }
+
 
 }

@@ -2,25 +2,28 @@ package Lab5;
 
 import Lab2.Node;
 
-public class LStack<T extends Comparable<T>> {
+public class LinkedListStack<T extends Comparable<T>> implements Stackable<T>{
 
     private Node<T> topNode;
 
+    @Override
     public void push(T data) {
         Node<T> newNode = new Node<>(data);
         newNode.setNext(topNode);
         topNode = newNode;
     }
 
-    public Node<T> pop() {
-        Node<T> toDel = topNode;
-        if(topNode != null)
-            topNode = topNode.getNext();
-        return toDel;
+    @Override
+    public T pop() {
+        if (isEmpty()) return null;
+        T temp = topNode.getData();
+        topNode.setNext(topNode.getNext());
+        return temp;
     }
 
-    public Node<T> peek() {
-        return topNode;
+    @Override
+    public T peek() {
+        return topNode.getData();
     }
 
     public int length() {
@@ -33,14 +36,14 @@ public class LStack<T extends Comparable<T>> {
         return length;
     }
 
+    @Override
     public boolean isEmpty() {
         return (topNode == null);
     }
 
+    @Override
     public void clear() {
         topNode = null;
     }
-
-
 
 }
