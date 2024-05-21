@@ -97,7 +97,7 @@ public class LinkedList <T extends Comparable<T>>{
         return false;
     }
 
-    public void print(){
+    public void traverse(){
         Node<T> current = head;
         System.out.print("Head --> ");
         while(current != null){
@@ -132,6 +132,10 @@ public class LinkedList <T extends Comparable<T>>{
         Node<T> next = curr.getNext();
         curr.setNext(prev);
         return reverseRecursive(next, curr);
+    }
+
+    public boolean isEmpty(){
+        return head == null;
     }
 
 }

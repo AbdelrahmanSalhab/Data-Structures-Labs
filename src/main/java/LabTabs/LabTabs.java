@@ -4,11 +4,8 @@ import Lab3.DLinkedList;
 import Lab4.CursorArray;
 import Lab6.Market;
 import Lab7.Manager;
-import Lab7.TNode;
 import Lab8.AVL;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -370,14 +367,14 @@ public class LabTabs extends Application {
         btReverse.setOnAction(event -> {
             list.reverse();
             lbOut.setText("Reversed");
-            list.print();
+            list.traverse();
             btReverse.setStyle("-fx-background-color: lightgreen");
         });
 
         btnReverseRecursively.setOnAction(event -> {
             list.reverseRecursive();
             lbOut.setText("Reversed Recursively");
-            list.print();
+            list.traverse();
             btnReverseRecursively.setStyle("-fx-background-color: lightgreen");
         });
 

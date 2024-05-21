@@ -13,7 +13,7 @@ public class Driver {
         list.insert(4);
         list.insert(8);
         list.insert(10);
-        list.print();
+        list.traverse();
 
         if(list.find(5))
             System.out.println("Found");
@@ -24,8 +24,8 @@ public class Driver {
             System.out.println("Deleted 5");
         else
             System.out.println("5 not found");
-        list.print();
+        list.traverse();
         list.reverseRecursive();
-        list.print();
+        list.traverse();
     }
 }
